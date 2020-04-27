@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
         lvTopics = findViewById(R.id.lv_topics);
 
         List<TopicModel> topicModels = DatabaseUtils.getInstance(this).getListTopic();
+
         List<CategoryModel> categoryModels = DatabaseUtils.getInstance(this).getListCategory(topicModels);
+
         HashMap<String, List<TopicModel>> hashMap = DatabaseUtils.getInstance(this)
                 .getHashMapTopic(topicModels, categoryModels);
 

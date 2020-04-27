@@ -17,7 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.module2_toeic.R;
-import com.example.module2_toeic.background.ReminderService;
+import com.example.module2_toeic.background.ReminderReceiver;
 
 import java.util.Calendar;
 
@@ -27,7 +27,7 @@ import butterknife.OnClick;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private final String TIME_REMINDER_KEY = "time_reminder_key";
+    public static String TIME_REMINDER_KEY = "time_reminder_key";
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -98,10 +98,10 @@ public class SettingActivity extends AppCompatActivity {
         //HH:mm
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0, 2)));
         calendar.set(Calendar.MINUTE, Integer.parseInt(time.substring(3, 5)));
-
-        Intent intent = new Intent(this, ReminderService.class);
+        calendar.set(Calendar.SECOND, 0);
+        Intent intent = new Intent(this, ReminderReceiver.class);
         PendingIntent pendingIntent =
-                PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (swReminder.isChecked()) {
             editor.putString(TIME_REMINDER_KEY, time);

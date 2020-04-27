@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         imageAdapter.notifyDataSetChanged();
         if (ImageUtils.getListImage().isEmpty()) {
             tvUp.setText("No Image");
-            tvDown.setText("Tab + to creat the new one");
+            tvDown.setText("Tab + to create the new one");
         }
         if (ImageUtils.getListImage().isEmpty() == false) {
             tvUp.setText(null);
