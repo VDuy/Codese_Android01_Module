@@ -3,6 +3,7 @@ package com.example.android1_module3_tmdb.activities;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlContainer;
     @BindView(R.id.bn_main)
     BottomNavigationView bnMain;
+
 
     private FragmentManager fragmentManager;
     private MoviesFragment moviesFragment = new MoviesFragment();

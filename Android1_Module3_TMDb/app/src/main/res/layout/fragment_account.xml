@@ -1,15 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AccountFragment"
     android:background="@color/colorPrimaryDark">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll_sign_in"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:padding="@dimen/space_default">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Please sign in to use this feature"
+            android:textColor="@color/colorTextPrimary" />
+
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_default"
+            android:background="@drawable/custom_sign_in_field"
+            android:backgroundTint="#515151"
+            android:hint="Username"
+            android:paddingHorizontal="@dimen/space_default"
+            android:paddingVertical="@dimen/space_medium"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="#CCFFFFFF"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_default"
+            android:background="@drawable/custom_sign_in_field"
+            android:backgroundTint="#515151"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="@dimen/space_default"
+            android:paddingVertical="@dimen/space_medium"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="#CCFFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_accent_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Sign in"
+            android:padding="@dimen/space_medium"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Account" />
+        android:background="#CC000000"
+        android:gravity="center"
+        android:visibility="gone">
 
-</FrameLayout>
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/colorAccent"
+            style="@style/SpinKitView.Large.Circle"/>
+    </LinearLayout>
+</RelativeLayout>

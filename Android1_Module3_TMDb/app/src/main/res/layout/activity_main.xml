@@ -37,6 +37,7 @@
         app:menu="@menu/main_bottom_tab"
         app:itemIconTint="@color/bottom_tab_color_selector"
         app:itemTextColor="@color/bottom_tab_color_selector"
-        app:labelVisibilityMode="selected"/>
+        app:labelVisibilityMode="selected"
+        />
 
 </RelativeLayout>

@@ -1,15 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     tools:context=".fragments.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+        <Spinner
+            android:id="@+id/spn_search"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#00FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_add_spinner"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="1dp"
+            android:layout_toEndOf="@id/spn_search"
+            android:gravity="center_vertical"
+            android:text="Search"
+            android:textColor="#515151" />
+
+        <EditText
+
+            android:id="@+id/et_search"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+
+            android:layout_toEndOf="@id/tv_add_spinner"
+            android:background="@drawable/custom_account"
+            android:backgroundTint="@color/colorPrimary"
+            android:hint="Enter keyword to search"
+            android:padding="@dimen/space_medium"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="#CCFFFFFF"
+            android:textSize="14sp" />
+
+        <ImageView
+
+            android:id="@+id/imgSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/et_search"
+            android:padding="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_search_black_24dp"
+            android:tint="@color/colorAccent" />
+
     <TextView
+        android:id="@+id/tv_result_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_search"
+        android:layout_marginHorizontal="@dimen/space_default"
+        android:textAlignment="textStart"
+        android:textColor="#CCC" />
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/rcv_movies_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Search" />
+        android:layout_below="@id/tv_result_search"
+        android:layout_marginTop="16dp" />
 
-</FrameLayout>
+
+</RelativeLayout>
