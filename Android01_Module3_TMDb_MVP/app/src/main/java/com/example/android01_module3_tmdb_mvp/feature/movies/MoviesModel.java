@@ -1,0 +1,28 @@
+package com.example.android01_module3_tmdb_mvp.feature.movies;
+
+import com.example.android01_module3_tmdb_mvp.api.APIService;
+import com.example.android01_module3_tmdb_mvp.api.RetrofitConfiguration;
+import com.example.android01_module3_tmdb_mvp.models.GetMoviesResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MoviesModel implements MoviesContract.Model {
+    @Override
+    public void getMovies(OnFinishGetMovies onFinishGetMovies, int page) {
+        APIService service = RetrofitConfiguration.getInstance().create(APIService.class);
+        Call<GetMoviesResponse> call = service.getMovies(page);
+        call.enqueue(new Callback<GetMoviesResponse>() {
+            @Override
+            public void onResponse(Call<GetMoviesResponse> call, Response<GetMoviesResponse> response) {
+                onFinishGetMovies.onResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<GetMoviesResponse> call, Throwable t) {
+                onFinishGetMovies.onFailure(t.toString());
+            }
+        });
+    }
+}

@@ -1,7 +1,5 @@
 package com.example.android1_module3_tmdb.activities;
 
-
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,10 +19,15 @@ import com.bumptech.glide.Glide;
 import com.example.android1_module3_tmdb.R;
 import com.example.android1_module3_tmdb.api.APIService;
 import com.example.android1_module3_tmdb.api.RetrofitConfiguration;
+import com.example.android1_module3_tmdb.models.GetMovieAccountStatesResponse;
 import com.example.android1_module3_tmdb.models.GetMovieDetailResponse;
+import com.example.android1_module3_tmdb.models.SetFavoriteMovieResponse;
+import com.example.android1_module3_tmdb.models.SetFavouriteMovieRequest;
 
-import java.text.DecimalFormat;
+import com.example.android1_module3_tmdb.utils.Utils;
+
 import java.text.NumberFormat;
+import java.util.Currency;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,38 +41,38 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_background)
     ImageView ivBackground;
-    @BindView(R.id.iv_back)
-    ImageView ivBack;
-    @BindView(R.id.iv_favourite)
-    ImageView ivFavourite;
-    @BindView(R.id.ns_detail)
-    NestedScrollView nsDetail;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_genres)
     TextView tvGenres;
-    @BindView(R.id.ll_watch_trailer)
-    LinearLayout llWatchTrailer;
-    GetMovieDetailResponse movie;
-    @BindView(R.id.rb_movie_rated)
-    RatingBar rbRated;
-    @BindView(R.id.tv_movie_voted)
-    TextView tvVoted;
-    @BindView(R.id.tv__movie_runtime)
+    @BindView(R.id.tv_rating_score)
+    TextView tvRatingScore;
+    @BindView(R.id.rb_rating_star)
+    RatingBar rbRatingStar;
+    @BindView(R.id.tv_vote_count)
+    TextView tvVoteCount;
+    @BindView(R.id.tv_run_time)
     TextView tvRunTime;
-    @BindView(R.id.tv_movie_result_date)
-    TextView tvResultDate;
-    @BindView(R.id.tv_movie_result_overview)
-    TextView tvResultOverview;
-    @BindView(R.id.tv_movie_result_revenue)
-    TextView tvResultRevenue;
-    @BindView(R.id.tv_movie_result_company)
-    TextView tvResultCompany;
-    @BindView(R.id.tv_movie_result_country)
-    TextView tvResultCountry;
-    @BindView(R.id.tv_movie_rated)
-    TextView tvRated;
+    @BindView(R.id.tv_release_date)
+    TextView tvReleaseDate;
+    @BindView(R.id.tv_overview)
+    TextView tvOverview;
+    @BindView(R.id.tv_revenue)
+    TextView tvRevenue;
+    @BindView(R.id.tv_prod_companies)
+    TextView tvProdCompanies;
+    @BindView(R.id.tv_prod_countries)
+    TextView tvProdCountries;
+    @BindView(R.id.ns_detail)
+    NestedScrollView nsDetail;
+    @BindView(R.id.ll_loading)
+    LinearLayout llLoading;
+    @BindView(R.id.iv_favourite)
+    ImageView ivFavourite;
 
+    private GetMovieDetailResponse movie;
+    private APIService apiService;
+    private boolean isFavourite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,20 +80,59 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         ButterKnife.bind(this);
 
+        apiService = RetrofitConfiguration.getInstance().create(APIService.class);
+
+        if (Utils.getSessionId(this) == null) {
+            ivFavourite.setVisibility(View.INVISIBLE);
+        } else {
+            ivFavourite.setVisibility(View.VISIBLE);
+        }
+
         setupUI();
         loadData();
+    }
+
+    private void getMovieAccountStates() {
+        llLoading.setVisibility(View.VISIBLE);
+        Call<GetMovieAccountStatesResponse> call = apiService.getMovieAccountStates(
+                movie.getId(),
+                Utils.getSessionId(this)
+        );
+        call.enqueue(new Callback<GetMovieAccountStatesResponse>() {
+            @Override
+            public void onResponse(Call<GetMovieAccountStatesResponse> call, Response<GetMovieAccountStatesResponse> response) {
+                llLoading.setVisibility(View.INVISIBLE);
+                if (response.code() == 200) {
+                    isFavourite = response.body().isFavorite();
+                    updateImageView();
+                } else {
+                    Utils.showErrorFromServer(response, MovieDetailActivity.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetMovieAccountStatesResponse> call, Throwable t) {
+                llLoading.setVisibility(View.INVISIBLE);
+                Toast.makeText(MovieDetailActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadData() {
         int id = getIntent().getIntExtra("movie_id", -1);
 
-        APIService apiService = RetrofitConfiguration.getInstance().create(APIService.class);
         Call<GetMovieDetailResponse> call = apiService.getMovieDetail(id);
         call.enqueue(new Callback<GetMovieDetailResponse>() {
             @Override
             public void onResponse(Call<GetMovieDetailResponse> call, Response<GetMovieDetailResponse> response) {
-                movie = response.body();
-                setupUIWithData();
+                if (response.code() == 200) {
+                    movie = response.body();
+                    setupUIWithData();
+                    if (Utils.getSessionId(MovieDetailActivity.this) != null) getMovieAccountStates();
+                } else {
+                    Utils.showErrorFromServer(response, MovieDetailActivity.this);
+                    onBackPressed();
+                }
             }
 
             @Override
@@ -102,7 +144,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void setupUIWithData() {
         Glide.with(this)
-                .load(RetrofitConfiguration.getImageBaseUrlThumbnail() + movie.getPoster_path())
+                .load(RetrofitConfiguration.getImageBaseUrlOriginal() + movie.getPoster_path())
                 .centerCrop()
                 .into(ivBackground);
 
@@ -116,34 +158,36 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         }
         tvGenres.setText(genres);
-        String rated = String.valueOf(movie.getVote_average());
-        tvRated.setText(rated);
-        rbRated.setRating((float) (movie.getVote_average() / 2));
-        tvVoted.setText(String.valueOf(movie.getRelease_date()));
+
+        tvRatingScore.setText(String.valueOf(movie.getVote_average()));
+        rbRatingStar.setProgress((int) movie.getVote_average());
+        tvVoteCount.setText(String.valueOf(movie.getVote_count()));
         tvRunTime.setText(movie.getRuntime() + "m");
-        tvResultDate.setText(String.valueOf(movie.getRelease_date()));
-        tvResultOverview.setText(String.valueOf(movie.getOverview()));
 
-        NumberFormat format = new DecimalFormat("#,###.##");
+        tvReleaseDate.setText(movie.getRelease_date());
+        tvOverview.setText(movie.getOverview());
 
-        tvResultRevenue.setText("$" + format.format(movie.getRevenue()) + ",00");
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        numberFormat.setCurrency(Currency.getInstance("USD"));
+        tvRevenue.setText(numberFormat.format(movie.getRevenue()));
 
-        StringBuilder company = new StringBuilder();
+        StringBuilder prodCompanies = new StringBuilder();
         for (int i = 0; i < movie.getProduction_companies().size(); i++) {
-            company.append(movie.getProduction_companies().get(i).getName());
+            prodCompanies.append(movie.getProduction_companies().get(i).getName());
             if (i != movie.getProduction_companies().size() - 1) {
-                company.append(", ");
+                prodCompanies.append(", ");
             }
         }
-        tvResultCompany.setText(company);
-        StringBuilder country = new StringBuilder();
+        tvProdCompanies.setText(prodCompanies);
+
+        StringBuilder prodCountries = new StringBuilder();
         for (int i = 0; i < movie.getProduction_countries().size(); i++) {
-            country.append(movie.getProduction_countries().get(i).getName());
+            prodCountries.append(movie.getProduction_countries().get(i).getName());
             if (i != movie.getProduction_countries().size() - 1) {
-                country.append(", ");
+                prodCountries.append(", ");
             }
         }
-        tvResultCountry.setText(country);
+        tvProdCountries.setText(prodCountries);
     }
 
     private void setupUI() {
@@ -165,10 +209,43 @@ public class MovieDetailActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.iv_favourite:
+                updateFavouriteMovie();
                 break;
             case R.id.ll_watch_trailer:
                 watchTrailer();
                 break;
+        }
+    }
+
+    private void updateFavouriteMovie() {
+        llLoading.setVisibility(View.VISIBLE);
+        SetFavouriteMovieRequest body = new SetFavouriteMovieRequest(movie.getId(), !isFavourite);
+        Call<SetFavoriteMovieResponse> call = apiService.setFavouriteMovie(body, Utils.getSessionId(this));
+        call.enqueue(new Callback<SetFavoriteMovieResponse>() {
+            @Override
+            public void onResponse(Call<SetFavoriteMovieResponse> call, Response<SetFavoriteMovieResponse> response) {
+                llLoading.setVisibility(View.INVISIBLE);
+                if (response.code() == 201 || response.code() == 200) {
+                    isFavourite = !isFavourite;
+                    updateImageView();
+                } else {
+                    Utils.showErrorFromServer(response, MovieDetailActivity.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SetFavoriteMovieResponse> call, Throwable t) {
+                llLoading.setVisibility(View.INVISIBLE);
+                Toast.makeText(MovieDetailActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateImageView() {
+        if (isFavourite) {
+            ivFavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            ivFavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 

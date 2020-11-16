@@ -12,13 +12,13 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/space_default">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="Please sign in to use this feature"
             android:textColor="@color/colorTextPrimary" />
 
@@ -27,12 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_default"
-            android:background="@drawable/custom_sign_in_field"
-            android:backgroundTint="#515151"
             android:hint="Username"
             android:paddingHorizontal="@dimen/space_default"
             android:paddingVertical="@dimen/space_medium"
             android:textColor="@color/colorTextPrimary"
+            android:background="@drawable/custom_sign_in_field"
             android:textColorHint="#CCFFFFFF"
             android:textSize="14sp" />
 
@@ -40,12 +39,11 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_default"
-            android:background="@drawable/custom_sign_in_field"
-            android:backgroundTint="#515151"
+            android:layout_marginTop="@dimen/space_medium"
             android:hint="Password"
             android:inputType="textPassword"
             android:paddingHorizontal="@dimen/space_default"
+            android:background="@drawable/custom_sign_in_field"
             android:paddingVertical="@dimen/space_medium"
             android:textColor="@color/colorTextPrimary"
             android:textColorHint="#CCFFFFFF"
@@ -55,29 +53,52 @@
             android:id="@+id/tv_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/space_default"
+            android:paddingHorizontal="@dimen/space_default"
+            android:paddingVertical="@dimen/space_medium"
             android:background="@drawable/custom_accent_button"
-            android:backgroundTint="@color/colorAccent"
-            android:text="Sign in"
-            android:padding="@dimen/space_medium"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="14sp" />
+            android:text="Sign in" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_account"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_default">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to TMDb"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_sign_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign out"
+            android:background="@drawable/custom_accent_button"
+            android:paddingVertical="@dimen/space_medium"
+            android:paddingHorizontal="@dimen/space_default"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CC000000"
+        android:background="#80000000"
         android:gravity="center"
         android:visibility="gone">
 
         <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.FadingCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:SpinKit_Color="@color/colorAccent"
-            style="@style/SpinKitView.Large.Circle"/>
+            app:SpinKit_Color="@color/colorAccent" />
     </LinearLayout>
+
 </RelativeLayout>
