@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#e88c30</color>
+    <color name="colorPrimaryDark">#915110</color>
+    <color name="colorAccent">#16a9c7</color>
+
+    <color name="colorTitleText">#242424</color>
+    <color name="colorContentText">#545454</color>
+
+    <color name="colorHomeTag">#a5e830</color>
+    <color name="colorFamilyTag">#30c9e8</color>
+    <color name="colorWorkTag">#8930e8</color>
+    <color name="colorDefaultTag">#e88c30</color>
+
+    <color name="colorBackground">#F7F7F7</color>
+
+
+</resources>

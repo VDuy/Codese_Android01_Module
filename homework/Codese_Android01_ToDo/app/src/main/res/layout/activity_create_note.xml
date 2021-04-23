@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.CreateNoteActivity">
+
+
+    <EditText
+        android:id="@+id/et_set_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:padding="@dimen/space_large"
+        android:textColor="@color/colorTitleText"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+
+    <Spinner
+        android:id="@+id/sp_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_large"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/et_set_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Date"
+        android:padding="@dimen/space_large"/>
+    <EditText
+        android:id="@+id/et_set_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Time"
+        android:padding="@dimen/space_large" />
+
+    <EditText
+        android:id="@+id/et_set_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Content"
+        android:padding="@dimen/space_large"
+        android:textColor="@color/colorContentText" />
+
+    <Button
+        android:id="@+id/bt_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:padding="@dimen/space_large"
+        android:text="Save"
+        android:textColor="#000" />
+
+</LinearLayout>
